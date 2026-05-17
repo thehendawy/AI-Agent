@@ -1,0 +1,63 @@
+<main class="page-shell">
+  <section class="workspace" aria-labelledby="page-title">
+    <div class="intro">
+      <p class="eyebrow">OpenAI Agents SDK + Angular</p>
+      <h1 id="page-title">Email Summarizer Agent</h1>
+      <p>
+        Paste a long email or message, then generate a short professional summary
+        in bullet points.
+      </p>
+    </div>
+
+    <div class="editor-grid">
+      <section class="panel input-panel" aria-label="Email input">
+        <div class="panel-header">
+          <h2>Email</h2>
+          <button class="secondary-button" type="button" (click)="useSampleEmail()">
+            Use sample email
+          </button>
+        </div>
+
+        <textarea
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          placeholder="Paste your long email or message here..."
+          aria-label="Email text"
+        ></textarea>
+
+        <div class="actions">
+          <button
+            class="primary-button"
+            type="button"
+            (click)="summarize()"
+            [disabled]="isLoading()"
+          >
+            {{ isLoading() ? 'Summarizing...' : 'Summarize' }}
+          </button>
+        </div>
+      </section>
+
+      <section class="panel summary-panel" aria-label="Summary output">
+        <div class="panel-header">
+          <h2>Summary</h2>
+        </div>
+
+        @if (error()) {
+          <p class="message error">{{ error() }}</p>
+        } @else if (isLoading()) {
+          <p class="message">Creating a concise summary...</p>
+        } @else if (summary().length) {
+          <ul class="summary-list">
+            @for (point of summary(); track point) {
+              <li>{{ point }}</li>
+            }
+          </ul>
+        } @else {
+          <p class="message">
+            Your bullet point summary will appear here.
+          </p>
+        }
+      </section>
+    </div>
+  </section>
+</main>
